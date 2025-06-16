@@ -1,0 +1,16 @@
+{
+  "name": "electronic-project",
+  "version": "1.0.0",
+  "description": "its a electroic project backend ,front end may be come in this project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mohamed fazil",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
