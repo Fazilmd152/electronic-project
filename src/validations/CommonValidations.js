@@ -1,5 +1,5 @@
 const { body, validationResult } = require('express-validator')
-const ErrorHandler = require('../utils/ErrorHandler')
+const ErrorHandler = require('../utils/ErrorHandler.js')
 
 class Validation {
 
