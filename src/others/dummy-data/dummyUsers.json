@@ -1,0 +1,34 @@
+[
+    {
+        "name": "John Doe",
+        "userName": "johndoe",
+        "email": "johndoe@example.com",
+        "password": "password123",
+        "profileImg": "",
+        "role": "user"
+    },
+    {
+        "name": "Jane Smith",
+        "userName": "janesmith",
+        "email": "janesmith@example.com",
+        "password": "password456",
+        "profileImg": "profile.jpg",
+        "role": "user"
+    },
+    {
+        "name": "Bob Johnson",
+        "userName": "bobjohnson",
+        "email": "bobjohnson@example.com",
+        "password": "password789",
+        "profileImg": "",
+        "role": "user"
+    },
+    {
+        "name": "Alice Brown",
+        "userName": "alicebrown",
+        "email": "alicebrown@example.com",
+        "password": "password012",
+        "profileImg": "avatar.png",
+        "role": "user"
+    }
+]

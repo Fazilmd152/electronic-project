@@ -13,10 +13,12 @@ class Utilities {
             secure: process.env.NODE_ENV !== 'development',
             sameSite: 'strict'
         }
+        
+        const {password,...rest}=user.toObject()
 
         res.status(200).cookie('auth', token, options).json({
             success: true,
-            user
+            user:rest
         })
     }
 }

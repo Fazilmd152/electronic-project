@@ -33,10 +33,8 @@ const userSchema = Mongoose.Schema({
     },
     role: {
         type: String,
-        enum: {
-            values: ['admin', 'seller', 'user'],
-            required: [true, "Please provide valid role"]
-        },
+        enum: ['admin', 'seller', 'user'],
+        required: [true, "Please provide a valid role"],
         default: 'user'
     },
     resetPassswordToken: String,
@@ -50,7 +48,7 @@ const userSchema = Mongoose.Schema({
 //------hash password-------\\
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next()
-    this.password = bcrypt.hash(this.password, 11)
+    this.password = await bcrypt.hash(this.password, 11)
 })
 
 
@@ -67,6 +65,6 @@ userSchema.methods.getJwtToken = () => {
 }
 
 
-const UserModel=mongoose.model('user',userSchema)
+const UserModel = mongoose.model('user', userSchema)
 
-module.exports=UserModel
+module.exports = UserModel

@@ -1,5 +1,5 @@
 const asyncError = require('../middlewares/asyncError')
-const User = require('../model/userModel')
+const User = require('../models/userModel')
 const ErrorHandler = require('../utils/ErrorHandler')
 const Utilities = require('../utils/Utilities')
 const util = new Utilities()
@@ -9,6 +9,7 @@ Create user (post)  - api/auth/create
 ****/
 exports.createUser = asyncError(async (req, res, next) => {
     const { name, userName, email, password } = req.body
+   
     const user = await User.create({
         name, email,
         userName, password,
