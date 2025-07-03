@@ -1,0 +1,43 @@
+paths:
+  /auth/create-user:
+    post:
+      summary: Create a new User.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: Object
+              required:
+                - name
+                - userName
+                - email
+                - password
+                - phone
+              properties:
+                name:
+                  type: string
+                  example: mohamed fazil
+                email:
+                  type: string
+                  example: fazil123@gmail.com
+                password:
+                  type: string
+                  example: strongpassword123
+                phone:
+                  type: string
+                  example: "9876543210"
+                userName:
+                  type: string
+                  example: fazilmd
+                role:
+                  type: string
+                  enum: [admin, user]
+                  example: user
+        responses:
+        201:
+          description: User created successfully
+        400:
+          description: Validation or input error

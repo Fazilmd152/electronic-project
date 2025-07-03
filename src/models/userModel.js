@@ -39,15 +39,35 @@ const userSchema = Mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'seller', 'user'],
+        enum: ['admin', 'user'],
         required: [true, "Please provide a valid role"],
         default: 'user'
     },
-    resetPassswordToken: String,
-    resetPasswordTokenExpire: Date,
-    otp: String,
-    otpDetails: String,
-    otpExpire: Date
+    resetPassswordToken: {
+        type: String,
+        select: false
+    },
+    resetPasswordTokenExpire: {
+        type: Date,
+        select: false
+    },
+    otp: {
+        type: String,
+        select: false
+    },
+    otpExpire: {
+        type: Date,
+        select: false
+    },
+    otpAttempts: {
+        type: Number,
+        select: false,
+        default:0
+    },
+    otpBlockedUntil:{
+        type:Date,
+        select:false
+    }
 }, { timeStamps: true })
 
 
