@@ -15,6 +15,12 @@ const userSchema = Mongoose.Schema({
         type: String,
         required: [true, "Please provide username"]
     },
+    phone: {
+        type: String,
+        required: [true, "Please provide phone number"],
+        validate: [(val) => validator.isMobilePhone(val, 'en-IN'), "Enter valid mobile phone number"],
+        unique: true
+    },
     email: {
         type: String,
         required: [true, "Please provide your email"],

@@ -8,11 +8,12 @@ const util = new Utilities()
 Create user (post)  - api/auth/create
 ****/
 exports.createUser = asyncError(async (req, res, next) => {
-    const { name, userName, email, password } = req.body
-   
+    const { name, userName, email, password,phone } = req.body
+   const userExist=await User.findOne({email})
+   if(userExist)return next(new ErrorHandler("User already exists", 401))
     const user = await User.create({
         name, email,
-        userName, password,
+        userName, password,phone,
         role: req.body.role || 'user'
     })
     if (!user)

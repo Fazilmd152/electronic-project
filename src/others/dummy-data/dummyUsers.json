@@ -1,34 +1,38 @@
 [
-    {
-        "name": "John Doe",
-        "userName": "johndoe",
-        "email": "johndoe@example.com",
-        "password": "password123",
-        "profileImg": "",
-        "role": "user"
-    },
-    {
-        "name": "Jane Smith",
-        "userName": "janesmith",
-        "email": "janesmith@example.com",
-        "password": "password456",
-        "profileImg": "profile.jpg",
-        "role": "user"
-    },
-    {
-        "name": "Bob Johnson",
-        "userName": "bobjohnson",
-        "email": "bobjohnson@example.com",
-        "password": "password789",
-        "profileImg": "",
-        "role": "user"
-    },
-    {
-        "name": "Alice Brown",
-        "userName": "alicebrown",
-        "email": "alicebrown@example.com",
-        "password": "password012",
-        "profileImg": "avatar.png",
-        "role": "user"
-    }
+  {
+    "name": "John Doe",
+    "userName": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "password123",
+    "profileImg": "",
+    "role": "user",
+    "phone": "9876543210"
+  },
+  {
+    "name": "Jane Smith",
+    "userName": "janesmith",
+    "email": "janesmith@example.com",
+    "password": "password456",
+    "profileImg": "profile.jpg",
+    "role": "user",
+    "phone": "8765432109"
+  },
+  {
+    "name": "Bob Johnson",
+    "userName": "bobjohnson",
+    "email": "bobjohnson@example.com",
+    "password": "password789",
+    "profileImg": "",
+    "role": "user",
+    "phone": "7654321098"
+  },
+  {
+    "name": "Alice Brown",
+    "userName": "alicebrown",
+    "email": "alicebrown@example.com",
+    "password": "password012",
+    "profileImg": "avatar.png",
+    "role": "user",
+    "phone": "6543210987"
+  }
 ]
