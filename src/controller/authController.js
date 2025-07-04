@@ -7,7 +7,7 @@ const util = new Utilities()
 //----- Create user (post)  - /auth/create
 exports.createUser = asyncError(async (req, res, next) => {
     const { name, userName, email, password, phone } = req.body
-    const userExist = await User.findOne({ $or:[{email},{phone}] })
+    const userExist = await User.findOne({ $or: [{ email }, { phone }] })
     if (userExist)
         return next(new ErrorHandler("User already exists email or phone", 401))
     const user = await User.create({
@@ -26,7 +26,7 @@ exports.login = asyncError(async (req, res, next) => {
     const { password, email, phone } = req.body || {}
     const { method } = req.params
 
-    const condition = await util.loginConditions(req,next)
+    const condition = await util.loginConditions(req, next)
 
     if (!condition)
         return next(new ErrorHandler("Invalid login method, phone or email is required to Login", 400))
@@ -54,7 +54,7 @@ exports.sendOtp = asyncError(async (req, res, next) => {
     const { email, phone } = req.body
     const { method } = req.params
 
-    const condition = await util.loginConditions(req,next)
+    const condition = await util.loginConditions(req, next)
 
     if (!condition)
         return next(new ErrorHandler("Invalid login method, phone or email is required to Login", 400))
@@ -69,29 +69,29 @@ exports.sendOtp = asyncError(async (req, res, next) => {
             401
         ))
 
-    util.sendOtp(user,res,next)
+    util.sendOtp(user, res, next)
 
 })
 
 
 //-----Verify otp  (post)  -/auth/verify-otp/:method= phone or email
 exports.verifyOtp = asyncError(async (req, res, next) => {
-    const { email,phone, otp } = req.body
+    const { email, phone, otp } = req.body
     const { method } = req.params
 
-    const condition = util.loginConditions(req,next)
+    const condition = util.loginConditions(req, next)
 
     if (!condition && !otp)
         return next(new ErrorHandler(
-    method==='email'?
-    "Email and otp both are required":
-    "Phone and otp both are required", 404))
+            method === 'email' ?
+                "Email and otp both are required" :
+                "Phone and otp both are required", 404))
 
     const user = await User.findOne({ $and: [condition, { otp }] }).select("+otp +otpExpire +otpAttempts +otpBlockedUntil")
 
     if (!user) return next(new ErrorHandler("User or Otp is invlaid for that you provided"))
 
-    util.verifyOtp(user, otp,next,res)
+    util.verifyOtp(user, otp, next, res)
 })
 
 
@@ -115,3 +115,56 @@ exports.changePassword = asyncError(async (req, res, next) => {
     })
 })
 
+
+//------ forgot paassword (post) -/auth/forgot-password
+exports.forgotPassword = asyncError(async (req, res, next) => {
+    const { email } = req.body
+
+    const user = await User.findOne({ email })
+
+    if (!user) return next(new ErrorHandler("User not found", 401))
+
+    const { resetPasswordToken, resetPasswordTokenExpire, token } = util.getResetPasswordToken()
+
+    user.resetPasswordToken = resetPasswordToken
+    user.resetPasswordTokenExpire = resetPasswordTokenExpire
+    await user.save()
+
+    const resetUrl = `http://host/reet-password/${token}`
+
+    const options = {
+        email: user.email,
+        subject: "Password reset URL",
+        message: `Your password reset URL is ${resetUrl}`
+    }
+
+    const isSent = await util.sendMail(options)
+
+    if (!isSent) return next(new ErrorHandler("Reset url has failed to send via Email"))
+    res.status(201).json({
+        success: true,
+        message: `Reset sent to your registerd email ${util.maskedMail(user)}`
+    })
+
+})
+
+
+
+//------Reset Password   (post)  -/auth/reset-password
+exports.resetPassword = asyncError(async (req, res, next) => {
+    const { newPassword } = req.body
+    const resetPasswordToken = util.getResetPasswordToken(req.params.resetToken)
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordTokenExpire: { $gt: Date.now() }
+    }).select("+password")
+    if (!user) return next(new ErrorHandler("Invlaid token or expired", 400))
+
+    user.password = newPassword
+    user.resetPasswordToken = undefined
+    user.resetPasswordTokenExpire = undefined
+    await user.save()
+
+    util.sendToken(res,user)
+})

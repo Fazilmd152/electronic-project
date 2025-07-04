@@ -37,14 +37,14 @@ class Utilities {
         })
     }
 
-    async sendOtp(user,res,next) {
+    async sendOtp(user, res, next) {
 
         if (user.otpBlockedUntil && user.otpBlockedUntil > Date.now()) {
             const minutesLeft = Math.ceil((user.otpBlockedUntil - Date.now()) / 6000)
             return next(new ErrorHandler(`Too many failed attempts. Try again in ${minutesLeft} minutes.`, 429))
         }
 
-        const plainOtp=this.getOtp()
+        const plainOtp = this.getOtp()
         const hashedOtp = await bcrypt.hash(String(plainOtp), 11)
         const otpExpire = new Date(Date.now() + 2 * 60 * 6000)
 
@@ -75,7 +75,7 @@ class Utilities {
         return emailStatus.status === "Success"
     }
 
-    async verifyOtp(user, otp,next,res) {
+    async verifyOtp(user, otp, next, res) {
         //checking if the users otp blocked
         if (user.otpBlockedUntil && user.otpBlockedUntil > Date.now()) {
             const minutesLeft = Math.ceil((user.otpBlockedUntil - Date.now()) / 6000)
@@ -107,16 +107,22 @@ class Utilities {
 
     }
 
-   async loginConditions(req, next) {
-    if (req.params.method === 'email') {
-        if (!req.body.email) return next(new ErrorHandler("Email is required to Login", 400))
-        return { email: req.body.email }
-    } else if (req.params.method === 'phone') {
-        if (!req.body.phone) return next(new ErrorHandler("Phone number is required to Login", 400))
-        return { phone: req.body.phone }
+    async loginConditions(req, next) {
+        if (req.params.method === 'email') {
+            if (!req.body.email) return next(new ErrorHandler("Email is required to Login", 400))
+            return { email: req.body.email }
+        } else if (req.params.method === 'phone') {
+            if (!req.body.phone) return next(new ErrorHandler("Phone number is required to Login", 400))
+            return { phone: req.body.phone }
+        }
     }
-}
 
+
+    getResetPasswordToken(token = crypto.randomBytes(32).toString('hex')) {
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex")
+        const expire = Date.now() + 15 * 60 * 1000
+        return { resetPasswordToken: hashedToken, resetPasswordTokenExpire: expire, token }
+    }
 
 }
 
